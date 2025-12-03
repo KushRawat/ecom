@@ -134,6 +134,19 @@ function App() {
 
   return (
     <div className="page">
+      <nav className="nav">
+        <div className="brand">
+          <div className="brand-mark" />
+          <div>
+            <strong>Lightning Cart</strong>
+            <p className="muted small">Ecommerce prototype store</p>
+          </div>
+        </div>
+        <div className="nav-actions">
+          <span className="pill slim">Free shipping over $100</span>
+          <span className="pill outline">Demo user: {USER_ID}</span>
+        </div>
+      </nav>
       <header className="hero">
         <div>
           <p className="eyebrow">Lightning Cart</p>
@@ -183,10 +196,14 @@ function App() {
           <div className="products">
             {products.map((product) => (
               <article key={product.id} className="product-card">
+                <div className="product-hero" aria-hidden>
+                  <span className="product-icon">🛍️</span>
+                </div>
                 <div>
                   <p className="label">SKU {product.id.toUpperCase()}</p>
                   <h3>{product.name}</h3>
                   <p className="price">{currency.format(product.price)}</p>
+                  <p className="muted small">Ships in 2-3 business days</p>
                 </div>
                 <button disabled={busy} onClick={() => handleAdd(product.id)}>
                   Add to cart
