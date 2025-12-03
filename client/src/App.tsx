@@ -9,6 +9,8 @@ import {
   generateDiscount,
 } from './api';
 import type { Cart, Metrics, Product } from './types';
+import { useToast } from './components/ToastProvider';
+import { Modal } from './components/Modal';
 
 const USER_ID = 'demo-user';
 const DISCOUNT_INTERVAL = Number(import.meta.env.VITE_DISCOUNT_INTERVAL ?? 3);
@@ -22,6 +24,8 @@ function App() {
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const { addToast } = useToast();
 
   useEffect(() => {
     void refreshProducts();
@@ -73,9 +77,10 @@ function App() {
     try {
       const updated = await addItem(USER_ID, productId, 1);
       setCart(updated);
-      setStatus('Item added to cart');
+      addToast('Item added to cart', 'success');
     } catch (err) {
       setError((err as Error).message);
+      addToast((err as Error).message, 'error');
     } finally {
       setBusy(false);
     }
@@ -92,16 +97,18 @@ function App() {
     setStatus(null);
     try {
       const order = await checkoutCart(USER_ID, discountCode || undefined);
-      setStatus(
-        `Order #${order.id} placed. Charged ${currency.format(order.total)}${
+      addToast(
+        `Order #${order.id} placed for ${currency.format(order.total)}${
           order.discountCode ? ` with code ${order.discountCode}` : ''
         }`,
+        'success',
       );
       setDiscountCode('');
       await refreshCart();
       await refreshMetrics();
     } catch (err) {
       setError((err as Error).message);
+      addToast((err as Error).message, 'error');
     } finally {
       setBusy(false);
     }
@@ -114,10 +121,12 @@ function App() {
     try {
       const discount = await generateDiscount();
       setDiscountCode(discount.code);
-      setStatus(`New code ${discount.code} ready for the next eligible order.`);
+      addToast(`New code ${discount.code} ready`, 'success');
+      setModalOpen(true);
       await refreshMetrics();
     } catch (err) {
       setError((err as Error).message);
+      addToast((err as Error).message, 'error');
     } finally {
       setBusy(false);
     }
@@ -284,6 +293,23 @@ function App() {
           )}
         </div>
       </section>
+
+      <Modal open={modalOpen} title="Discount code ready" onClose={() => setModalOpen(false)}>
+        <p className="muted">Share this code for the next eligible order.</p>
+        <div className="code-modal">
+          <strong>{discountCode || activeDiscount?.code || '—'}</strong>
+          <button
+            onClick={() => {
+              if (discountCode || activeDiscount?.code) {
+                navigator.clipboard.writeText(discountCode || activeDiscount!.code);
+                addToast('Code copied', 'success');
+              }
+            }}
+          >
+            Copy
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
