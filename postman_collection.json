@@ -1,0 +1,126 @@
+{
+  "info": {
+    "name": "Ecom Cart + Discount",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Sample requests for the ecommerce cart + discount prototype"
+  },
+  "item": [
+    {
+      "name": "List products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "products"]
+        }
+      }
+    },
+    {
+      "name": "Get cart",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/demo-user",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "demo-user"]
+        }
+      }
+    },
+    {
+      "name": "Add item to cart",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"p1\",\n  \"quantity\": 1\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/demo-user/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "demo-user", "items"]
+        }
+      }
+    },
+    {
+      "name": "Checkout (no discount)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/demo-user/checkout",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "demo-user", "checkout"]
+        }
+      }
+    },
+    {
+      "name": "Checkout with discount",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"discountCode\": \"SAVE-EXAMPLE\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/demo-user/checkout",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "demo-user", "checkout"]
+        }
+      }
+    },
+    {
+      "name": "Admin: generate discount",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/discounts",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin", "discounts"]
+        }
+      }
+    },
+    {
+      "name": "Admin: metrics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/metrics",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin", "metrics"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ]
+}

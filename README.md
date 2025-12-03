@@ -19,6 +19,8 @@ npm run build         # compile backend
 npm run client:build  # build frontend
 ```
 
+Postman: import `postman_collection.json` (baseUrl defaults to `http://localhost:3000`) for sample calls to products, cart, checkout (with/without discount), and admin endpoints.
+
 Configuration:
 
 - `DISCOUNT_INTERVAL` (default `3`) controls which order numbers can receive a code.
