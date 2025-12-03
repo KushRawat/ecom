@@ -4,5 +4,9 @@ coverage
 .DS_Store
 client/node_modules
 client/dist
+client/src/*.js
+client/src/*.js.map
+client/src/*.d.ts
+client/src/*.d.ts.map
 *.log
 .env
